@@ -52,6 +52,16 @@ namespace StivePC.Models
 			return response.IsSuccessStatusCode;
 		}
 
+		public static bool DeleteQuery( string parameters )
+		{
+			API api = GetInstance();
+			using HttpClient client = new();
+			client.BaseAddress = new Uri( api.GetUrl() );
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
 		private string GetUrl()
 		{
 			return _url;

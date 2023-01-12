@@ -69,10 +69,7 @@ namespace StivePC.Models
 
 		public void AddElement( dynamic? element = null )
 		{
-			if ( element == null )
-			{
-				element = this;
-			}
+			element ??= this;
 
 			string tableName = GetTableName( element );
 			string parameters = tableName + "/Add" + tableName + "?";
@@ -93,6 +90,17 @@ namespace StivePC.Models
 		public static string GetTableName( object table )
 		{
 			return table.GetType().Name;
+		}
+
+		public void DeleteElement( dynamic? element = null )
+		{
+			element ??= this;
+
+			string tableName = GetTableName( element );
+			string idElement = element.GetType().GetProperties()[ 0 ].GetValue( element ).ToString();
+			string parameters = tableName + "/Delete" + tableName + "?id=" + idElement;
+
+			API.DeleteQuery( parameters );
 		}
 
 		public static string RmSpaces( string value )
