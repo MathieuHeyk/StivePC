@@ -25,12 +25,12 @@ namespace StivePC.Models
 			return _instance;
 		}
 
-		public static dynamic? Query( string parameters )
+		public static dynamic? GetQuery( string parameters )
 		{
 			API api = GetInstance();
 			using HttpClient client = new();
 			client.BaseAddress = new Uri( api.GetUrl() );
-			HttpResponseMessage response = client.GetAsync( api.GetUrl() + parameters ).Result;
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
 
 			if ( !response.IsSuccessStatusCode )
 			{
@@ -40,6 +40,16 @@ namespace StivePC.Models
 			string json = response.Content.ReadAsStringAsync().Result;
 			return parameters.Contains( "All" ) ? JArray.Parse( json )
 															: JObject.Parse( json );
+		}
+
+		public static bool PostQuery( string parameters )
+		{
+			API api = GetInstance();
+			using HttpClient client = new();
+			client.BaseAddress = new Uri( api.GetUrl() );
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
 		}
 
 		private string GetUrl()
