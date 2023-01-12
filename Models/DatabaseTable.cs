@@ -15,7 +15,7 @@ namespace StivePC.Models
 			string tableName	= GetTableName( this );
 		//	string idName		= GetIdName( this ); // "idName" is always "id"
 			string parameters = tableName + "/Get" + tableName + "ById?id=" + id;
-			JObject? result	= API.Query( parameters );
+			JObject? result	= API.GetQuery( parameters );
 
 			if ( result == null )
 			{
@@ -41,7 +41,7 @@ namespace StivePC.Models
 		// ToDo: Move this block inside API object ?
 			string tableName  = GetTableName( this );
 			string parameters = tableName + "/GetAll" + tableName + "x";
-			JArray? result 	= API.Query( parameters );
+			JArray? result 	= API.GetQuery( parameters );
 
 			if ( result == null )
 			{
@@ -67,9 +67,44 @@ namespace StivePC.Models
 			return elements;
 		}
 
+		public void AddElement( dynamic? element = null )
+		{
+			if ( element == null )
+			{
+				element = this;
+			}
+
+			string tableName = GetTableName( element );
+			string parameters = tableName + "/Add" + tableName + "?";
+			List<string> listParam = new();
+			PropertyInfo[] properties = element.GetType().GetProperties();
+
+			for ( int i = 1; i < properties.Length; i++ )
+			{
+				PropertyInfo property = properties[ i ];
+				string propertyValue = RmSpaces( property.GetValue( element ) );
+				listParam.Add( property.Name + "=" + propertyValue );
+			}
+
+			parameters += string.Join( "&", listParam );
+			API.PostQuery( parameters );
+		}
+
 		public static string GetTableName( object table )
 		{
 			return table.GetType().Name;
+		}
+
+		public static string RmSpaces( string value )
+		{
+			string result = "";
+
+			foreach ( char c in value )
+			{
+				result += c != ' ' ? c : "%20";
+			}
+
+			return result;
 		}
 	}
 }
