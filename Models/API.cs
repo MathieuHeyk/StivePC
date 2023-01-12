@@ -18,20 +18,33 @@ namespace StivePC.Models
 			_url = url;
 		}
 
-		public static API GetInstance( string url )
+		public static API GetInstance( string url = "https://localhost:7201/" )
 		{
 			_instance ??= new API( url );
 
 			return _instance;
 		}
 
-		public JObject? Query( string parameters )
+		public static dynamic? Query( string parameters )
 		{
+			API api = GetInstance();
 			using HttpClient client = new();
-			client.BaseAddress = new Uri( _url );
-			HttpResponseMessage response = client.GetAsync( _url + parameters ).Result;
+			client.BaseAddress = new Uri( api.GetUrl() );
+			HttpResponseMessage response = client.GetAsync( api.GetUrl() + parameters ).Result;
 
-			return response.IsSuccessStatusCode ? JObject.Parse( response.Content.ReadAsStringAsync().Result ) : null;
+			if ( !response.IsSuccessStatusCode )
+			{
+				return null;
+			}
+
+			string json = response.Content.ReadAsStringAsync().Result;
+			return parameters.Contains( "All" ) ? JArray.Parse( json )
+															: JObject.Parse( json );
+		}
+
+		private string GetUrl()
+		{
+			return _url;
 		}
 	}
 }
