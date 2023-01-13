@@ -30,12 +30,10 @@ namespace StivePC.Models
 		 *	</example>
 		 *	</remarks>
 		 */
-		public dynamic[]? GetAllElements()
+		public dynamic[]? FindAllElements()
 		{
 			Type objectType   = GetType();
 			string tableName	= objectType.Name;
-
-		// ToDo: Remove plural from API functions
 			string parameters = string.Format( "{0}/GetAll{0}", tableName );
 			JArray? result 	= API.GetQuery( parameters );
 
@@ -63,7 +61,7 @@ namespace StivePC.Models
 			Type objectType   = element.GetType();
 			string tableName  = objectType.Name;
 			string parameters = string.Format( "{0}/Add{0}?", tableName );
-			List<string> listParam    = new();
+			List<string> listParam = new();
 			PropertyInfo[] properties = objectType.GetProperties();
 
 			for ( int i = 1; i < properties.Length; i++ )
@@ -86,6 +84,35 @@ namespace StivePC.Models
 			string parameters = string.Format( "{0}/Delete{0}?id={1}", tableName, idElement );
 
 			API.DeleteQuery( parameters );
+		}
+
+		public dynamic EditElement( dynamic element, dynamic? element2 = null )
+	// ToDo: Check if arguments are both of the same type
+		{
+			dynamic elt  = element2 is null ? this : element,
+					  elt2 = element2 is null ? element : element2;
+
+			string elementID = elt.GetId().ToString();
+			Type objectType = elt.GetType();
+			Type objectType2 = elt2.GetType();
+			string tableName = objectType.Name;
+			elt2.GetType().GetProperties()[ 0 ].SetValue( elt2, Convert.ToInt32( elementID ) );
+			string parameters = string.Format( "{0}/Edit{0}?id={1}&", tableName, elementID );
+
+			List<string> listParam = new();
+			PropertyInfo[] properties = objectType2.GetProperties();
+
+			for (int i = 1; i < properties.Length; i++)
+			{
+				PropertyInfo property = properties[ i ];
+				string propertyValue = RmSpaces( property.GetValue( element ) );
+				listParam.Add( property.Name + "=" + propertyValue );
+			}
+
+			parameters += string.Join( "&", listParam );
+
+			API.UpdateQuery( parameters );
+			return elt2;
 		}
 
 		public int GetId( dynamic? element = null )
