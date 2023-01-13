@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace StivePC.Models
 {
-	internal class API
+	public sealed class API
+// "sealed" => avoid sub-object of API
 	{
 		private static API? _instance;
 		private string _url;
@@ -20,8 +21,7 @@ namespace StivePC.Models
 
 		public static API GetInstance( string url = "https://localhost:7201/" )
 		{
-			_instance ??= new API( url );
-
+			_instance ??= new API( url ); // If no API object already created, create one
 			return _instance;
 		}
 
@@ -58,6 +58,16 @@ namespace StivePC.Models
 			using HttpClient client = new();
 			client.BaseAddress = new Uri( api.GetUrl() );
 			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool UpdateQuery( string parameters )
+		{
+			API api = GetInstance();
+			using HttpClient client = new();
+			client.BaseAddress = new Uri( api.GetUrl() );
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
 
 			return response.IsSuccessStatusCode;
 		}
