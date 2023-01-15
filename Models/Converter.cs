@@ -1,46 +1,47 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StivePC.Models
 {
 	internal class Converter
 	{
-		public static dynamic? JSONToObject( JObject data, Type objectType )
+		public static dynamic? JSONToObject( JObject data, Type targetType )
 		{
-			Type objType = GetFullTypeName( objectType );
-			dynamic? obj = Activator.CreateInstance( objType );
+			dynamic? obj = Activator.CreateInstance( targetType );
 
 			if ( obj == null )
 			{
 				return null;
 			}
 
-			PropertyInfo[] propertyInfos = objType.GetProperties();
-
-			foreach ( PropertyInfo propertyInfo in propertyInfos )
+			foreach ( PropertyInfo propertyInfo in targetType.GetProperties() )
 			{
-				string propertyName  = propertyInfo.Name;
-				var	 propertyValue = data.GetValue( propertyName );
-				Type   propertyType	= propertyInfo.PropertyType;
-
-				var value = Convert.ChangeType( propertyValue, propertyType );
-				propertyInfo.SetValue( obj, value );
+				var propertyValue = data.GetValue( propertyInfo.Name );
+				var finalValue 	= Convert.ChangeType( propertyValue, propertyInfo.PropertyType );
+				propertyInfo.SetValue( obj, finalValue );
 			}
 
 			return obj;
 		}
 
+		public static string ForURL( object? data )
+		{
+			string valueAsString = data?.ToString() ?? "";
+
+			if ( !valueAsString.Contains( ' ' ) )
+			{
+				return valueAsString;
+			}
+
+			return String.Join( "%20", valueAsString.Split( ' ' ) );
+		}
+
 		public static Type GetFullTypeName( Type type )
 		{
 			string assemblyName = type.AssemblyQualifiedName ?? type.Name;
-			Type?  fullTypeName = Type.GetType( assemblyName );
 
-			return fullTypeName ?? type;
+			return Type.GetType( assemblyName ) ?? type;
 		}
 	}
 }
