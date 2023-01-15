@@ -19,9 +19,8 @@ namespace StivePC.Models
 		// Loop starts with the second property (no need of ID)
 			foreach ( PropertyInfo property in objectType.GetProperties()[ 1.. ] )
 			{
-				dynamic? propertyValue = property.GetValue( element );
-				string	valueAsString = Converter.ForURL( propertyValue );
-				parameters.Add( property.Name + "=" + valueAsString );
+				string propertyValue = Converter.ForURL( property.GetValue( element ) );
+				parameters.Add( property.Name + "=" + propertyValue );
 			}
 
 			string url = String.Format( "{0}/Add{0}?", objectType.Name )
@@ -81,6 +80,32 @@ namespace StivePC.Models
 			}
 
 			return elements;
+		}
+
+		/**
+		 * <summary>
+		 * Change the values of an <paramref name="element" /> into the database
+		 * </summary>
+		 * <param name="element">Element containing new value and the ID of old one</param>
+		 */
+		public static void Update( object element )
+		{
+			Type type = element.GetType();
+			List<string> parameters = new()
+			{
+				"id=" + type.GetProperties()[ 0 ].GetValue( element )
+			};
+
+			foreach ( PropertyInfo property in type.GetProperties()[ 1.. ] )
+			{
+				string propertyValue = Converter.ForURL( property.GetValue( element ) );
+				parameters.Add( property.Name + '=' + propertyValue );
+			}
+
+			string url = String.Format( "{0}/Edit{0}?", type.Name )
+						  + String.Join( "&", parameters );
+
+			API.UpdateQuery( url );
 		}
 
 	// == Others functions ==
