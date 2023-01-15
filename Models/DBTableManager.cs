@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace StivePC.Models
@@ -10,15 +9,17 @@ namespace StivePC.Models
 	{
 		public dynamic? FindElementById( int id )
 		{
-			Type objectType	= GetType();
-			string tableName	= objectType.Name;
-			string parameters = string.Format( "{0}/Get{0}ById?id={1}", tableName, id );
+			Type targetType	= GetType();
+			string typeName	= targetType.Name;
+			string parameters = string.Format( "{0}/Get{0}ById?id={1}", typeName, id );
 			JObject? result	= API.GetQuery( parameters );
 
-			return result != null											// condition
-				  ? Converter.JSONToObject( result, objectType )	// if condition is true
-				  : null;														// else
+			return result != null ? 										// condition
+					 Converter.JSONToObject( result, targetType ) : // if condition is true
+					 null;														// else
 		}
+
+	// ToDo: FindElementByProperty( ... ) -> with 1+ property ?
 
 		/** 
 		 *	<remarks>Variable type must be "<c>object[]?</c>".
@@ -32,12 +33,12 @@ namespace StivePC.Models
 		 */
 		public dynamic[]? FindAllElements()
 		{
-			Type objectType   = GetType();
-			string tableName	= objectType.Name;
-			string parameters = string.Format( "{0}/GetAll{0}", tableName );
+			Type targetType	= GetType();
+			string typeName	= targetType.Name;
+			string parameters = string.Format( "{0}/GetAll{0}", typeName );
 			JArray? result 	= API.GetQuery( parameters );
 
-			if ( result == null )
+			if ( result is null )
 			{
 				return null;
 			}
@@ -45,16 +46,17 @@ namespace StivePC.Models
 			int totalElements  = result.Count;
 			dynamic[] elements = new dynamic[ totalElements ];
 
-			for ( int i = 0; i < totalElements; i++ )
+			foreach ( JToken element in result )
 			{
-				JObject jsonElement = ( JObject ) result[ i ];
-				elements[ i ] = Converter.JSONToObject(jsonElement, objectType);
+				int index = result.IndexOf( element );
+				JObject jsonElement = ( JObject ) result[ index ];
+				elements[ index ]   = Converter.JSONToObject( jsonElement, targetType );
 			}
 
 			return elements;
 		}
 
-		public void AddElement( dynamic? element = null )
+		public void AddToDatabase( dynamic? element = null )
 		{
 			element ??= this;
 
@@ -75,12 +77,10 @@ namespace StivePC.Models
 			API.PostQuery( parameters );
 		}
 
-		public void DeleteElement( dynamic? element = null )
+		public void Delete()
 		{
-			element ??= this;
-
-			string tableName  = element.GetType().Name;
-			string idElement  = element.GetId().ToString();
+			string tableName  = GetType().Name;
+			string idElement  = GetId().ToString();
 			string parameters = string.Format( "{0}/Delete{0}?id={1}", tableName, idElement );
 
 			API.DeleteQuery( parameters );
@@ -89,11 +89,11 @@ namespace StivePC.Models
 		public dynamic EditElement( dynamic element, dynamic? element2 = null )
 	// ToDo: Check if arguments are both of the same type
 		{
-			dynamic elt  = element2 is null ? this : element,
+			dynamic elt  = element2 is null ? this 	: element,
 					  elt2 = element2 is null ? element : element2;
 
 			string elementID = elt.GetId().ToString();
-			Type objectType = elt.GetType();
+			Type objectType  = elt.GetType();
 			Type objectType2 = elt2.GetType();
 			string tableName = objectType.Name;
 			elt2.GetType().GetProperties()[ 0 ].SetValue( elt2, Convert.ToInt32( elementID ) );
@@ -117,10 +117,12 @@ namespace StivePC.Models
 
 		public int GetId( dynamic? element = null )
 		{
+			const uint ID = 0;
+
 			element ??= this;
 			Type objectType = element.GetType();
-			PropertyInfo mainProperty = objectType.GetProperties()[ 0 ];
-			object? propertyValue = mainProperty.GetValue( element );
+			PropertyInfo idProperty = objectType.GetProperties()[ ID ];
+			object? propertyValue = idProperty.GetValue( element );
 
 			return Convert.ToInt32( propertyValue );
 		}
