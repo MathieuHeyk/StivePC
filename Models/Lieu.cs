@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StivePC.Models
 {
-	internal class Lieu : DBTableManager
+	internal class Lieu
 	{
 		public int id_lieu { get; set; }
 		public string numero { get; set; }
