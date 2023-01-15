@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace StivePC.Models
 {
 	public sealed class API
-// "sealed" => avoid sub-object of API
+		 // sealed => avoid sub-object of API
 	{
 		private static API? _instance;
 		private string _url;
@@ -21,15 +21,23 @@ namespace StivePC.Models
 
 		public static API GetInstance( string url = "https://localhost:7201/" )
 		{
-			_instance ??= new API( url ); // If no API object already created, create one
+			_instance ??= new API( url ); // Set API if not yet
 			return _instance;
+		}
+
+		private string GetUrl()
+		{
+			return _url;
 		}
 
 		public static dynamic? GetQuery( string parameters )
 		{
-			API api = GetInstance();
-			using HttpClient client = new();
-			client.BaseAddress = new Uri( api.GetUrl() );
+			string apiUrl		= GetInstance().GetUrl();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( apiUrl )
+			};
+
 			HttpResponseMessage response = client.GetAsync( parameters ).Result;
 
 			if ( !response.IsSuccessStatusCode )
@@ -37,16 +45,21 @@ namespace StivePC.Models
 				return null;
 			}
 
-			string json = response.Content.ReadAsStringAsync().Result;
-			return parameters.Contains( "All" ) ? JArray.Parse( json )
-															: JObject.Parse( json );
+			string result = response.Content.ReadAsStringAsync().Result;
+
+			return parameters.Contains( "All" )
+				  ? JArray.Parse( result ) 		// Multiples elements
+				  : JObject.Parse( result );  	// Single element
 		}
 
+	// ToDo: Rewrite editing functions to avoid using API (if enough time)
 		public static bool PostQuery( string parameters )
 		{
-			API api = GetInstance();
-			using HttpClient client = new();
-			client.BaseAddress = new Uri( api.GetUrl() );
+			string apiUrl		 = GetInstance().GetUrl();
+			HttpClient client  = new()
+			{
+				BaseAddress = new Uri( apiUrl )
+			};
 			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
 
 			return response.IsSuccessStatusCode;
@@ -54,9 +67,11 @@ namespace StivePC.Models
 
 		public static bool DeleteQuery( string parameters )
 		{
-			API api = GetInstance();
-			using HttpClient client = new();
-			client.BaseAddress = new Uri( api.GetUrl() );
+			string apiUrl		 = GetInstance().GetUrl();
+			HttpClient client  = new()
+			{
+				BaseAddress = new Uri( apiUrl )
+			};
 			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
 
 			return response.IsSuccessStatusCode;
@@ -64,17 +79,14 @@ namespace StivePC.Models
 
 		public static bool UpdateQuery( string parameters )
 		{
-			API api = GetInstance();
-			using HttpClient client = new();
-			client.BaseAddress = new Uri( api.GetUrl() );
+			string apiUrl		 = GetInstance().GetUrl();
+			HttpClient client  = new()
+			{
+				BaseAddress = new Uri( apiUrl )
+			};
 			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
 
 			return response.IsSuccessStatusCode;
-		}
-
-		private string GetUrl()
-		{
-			return _url;
 		}
 	}
 }
