@@ -55,6 +55,34 @@ namespace StivePC.Models
 				  : null;
 		}
 
+	/**
+	 * <returns>Array of all the elements from a specified
+	 * <paramref name="type" />
+	 * </returns>
+	 */
+		public static dynamic? GetAll( string type )
+		{
+			string typeName  = Char.ToUpper( type[ 0 ] ) + type[ 1.. ];
+			Type? targetType = GetFullTypeName( typeName );
+			string url  	  = String.Format( "{0}/GetAll{0}", typeName );
+			JArray? result   = API.GetQuery( url );
+
+			if ( result is null || targetType is null )
+			{
+				return null;
+			}
+
+			object[] elements = new object[ result.Count ];
+			foreach ( JToken token in result )
+			{
+				int idToken = result.IndexOf( token );
+				var element = Converter.JSONToObject( ( JObject ) token, targetType );
+				elements[ idToken ] = element;
+			}
+
+			return elements;
+		}
+
 	// == Others functions ==
 		public static Type? GetFullTypeName( string targetType )
 		{
