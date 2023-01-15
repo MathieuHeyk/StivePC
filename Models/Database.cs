@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -27,6 +28,37 @@ namespace StivePC.Models
 						  + String.Join( '&', parameters );
 
 			API.PostQuery( url );
+		}
+
+	/**
+	 * <summary>Find a element of the specified
+	 * <paramref name="type" /> by its <paramref name="id" />
+	 * </summary>
+	 * <param name="type">The type of the element</param>
+	 * <param name="id">The ID of the element</param>
+	 */
+		public static dynamic? GetById( string type, uint id )
+		{
+			string typeName  = Char.ToUpper( type[ 0 ] ) + type[ 1.. ];
+			Type? targetType = GetFullTypeName( typeName );
+
+			if ( targetType is null )
+			{
+				return null;
+			}
+
+			string url  	 = String.Format( "{0}/Get{0}ById?id={1}", typeName, id.ToString() );
+			JObject? result = API.GetQuery( url );
+
+			return result != null
+				  ? Converter.JSONToObject( result, targetType )
+				  : null;
+		}
+
+	// == Others functions ==
+		public static Type? GetFullTypeName( string targetType )
+		{
+			return Type.GetType( "StivePC.Models." + targetType );
 		}
 	}
 }
