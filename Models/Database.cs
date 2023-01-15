@@ -11,7 +11,7 @@ namespace StivePC.Models
 	 * <summary>Add an element to the database (using the API)</summary>
 	 * <param name="element">The element to add</param>
 	 */
-		public static void Add( Object element )
+		public static void Add( object element )
 		{
 			Type objectType			 = element.GetType();
 			List<dynamic> parameters = new();
@@ -106,6 +106,18 @@ namespace StivePC.Models
 						  + String.Join( "&", parameters );
 
 			API.UpdateQuery( url );
+		}
+
+	/**
+	 * <summary>Remove an <paramref name="element" /> from the database</summary>
+	 */
+		public static void Delete( object element )
+		{
+			Type type  = element.GetType();
+			string id  = type.GetProperties()[ 0 ].GetValue( element ).ToString();
+			string url = String.Format( "{0}/Delete{0}?id={1}", type.Name, id );
+
+			API.DeleteQuery( url );
 		}
 
 	// == Others functions ==
