@@ -27,14 +27,11 @@ namespace StivePC.Models
 
 		public static string ForURL( object? data )
 		{
-			string valueAsString = data?.ToString() ?? "";
+			string value = data?.ToString() ?? "";
 
-			if ( !valueAsString.Contains( ' ' ) )
-			{
-				return valueAsString;
-			}
-
-			return String.Join( "%20", valueAsString.Split( ' ' ) );
+			return value.Contains( ' ' )
+				  ? String.Join( "%20", value.Split( ' ' ) )
+				  : value;
 		}
 
 		public static Type GetFullTypeName( Type type )
