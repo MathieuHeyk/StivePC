@@ -1,129 +1,117 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection;
 
 namespace StivePC.Models
 {
 	internal class Database
 	{
-	/**
-	 * <summary>Add an element to the database (using the API)</summary>
-	 * <param name="element">The element to add</param>
-	 */
-		public static void Add( object element )
+	// == LIEU == //
+		public static bool AddLieu( Lieu lieu )
 		{
-			Type objectType			 = element.GetType();
-			List<dynamic> parameters = new();
-
-		// Loop starts with the second property (no need of ID)
-			foreach ( PropertyInfo property in objectType.GetProperties()[ 1.. ] )
+			string host = "https://localhost:7201/";
+			string parameters = "Lieu/AddLieu?" + Converter.ToParameters( lieu );
+			HttpClient client = new()
 			{
-				string propertyValue = Converter.ForURL( property.GetValue( element ) );
-				parameters.Add( property.Name + "=" + propertyValue );
-			}
-
-			string url = String.Format( "{0}/Add{0}?", objectType.Name )
-						  + String.Join( '&', parameters );
-
-			API.PostQuery( url );
-		}
-
-	/**
-	 * <summary>Find a element of the specified
-	 * <paramref name="type" /> by its <paramref name="id" />
-	 * </summary>
-	 * <param name="type">The type of the element</param>
-	 * <param name="id">The ID of the element</param>
-	 */
-		public static dynamic? GetById( string type, uint id )
-		{
-			string typeName  = Char.ToUpper( type[ 0 ] ) + type[ 1.. ];
-			Type? targetType = GetFullTypeName( typeName );
-
-			if ( targetType is null )
-			{
-				return null;
-			}
-
-			string url  	 = String.Format( "{0}/Get{0}ById?id={1}", typeName, id.ToString() );
-			JObject? result = API.GetQuery( url );
-
-			return result != null
-				  ? Converter.JSONToObject( result, targetType )
-				  : null;
-		}
-
-	/**
-	 * <returns>Array of all the elements from a specified
-	 * <paramref name="type" />
-	 * </returns>
-	 */
-		public static dynamic? GetAll( string type )
-		{
-			string typeName  = Char.ToUpper( type[ 0 ] ) + type[ 1.. ];
-			Type? targetType = GetFullTypeName( typeName );
-			string url  	  = String.Format( "{0}/GetAll{0}", typeName );
-			JArray? result   = API.GetQuery( url );
-
-			if ( result is null || targetType is null )
-			{
-				return null;
-			}
-
-			object[] elements = new object[ result.Count ];
-			foreach ( JToken token in result )
-			{
-				int idToken = result.IndexOf( token );
-				var element = Converter.JSONToObject( ( JObject ) token, targetType );
-				elements[ idToken ] = element;
-			}
-
-			return elements;
-		}
-
-		/**
-		 * <summary>
-		 * Change the values of an <paramref name="element" /> into the database
-		 * </summary>
-		 * <param name="element">Element containing new value and the ID of old one</param>
-		 */
-		public static void Update( object element )
-		{
-			Type type = element.GetType();
-			List<string> parameters = new()
-			{
-				"id=" + type.GetProperties()[ 0 ].GetValue( element )
+				BaseAddress = new Uri( host )
 			};
 
-			foreach ( PropertyInfo property in type.GetProperties()[ 1.. ] )
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Lieu> GetAllLieu()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Lieu/GetAllLieu";
+			List<Lieu> lieux = new();
+			HttpClient client = new()
 			{
-				string propertyValue = Converter.ForURL( property.GetValue( element ) );
-				parameters.Add( property.Name + '=' + propertyValue );
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray lieuxJSON = JArray.Parse( json );
+
+				foreach ( JToken token in lieuxJSON )
+				{
+					Lieu lieu = Converter.ToLieu( token );
+					lieux.Add( lieu );
+				}
 			}
 
-			string url = String.Format( "{0}/Edit{0}?", type.Name )
-						  + String.Join( "&", parameters );
-
-			API.UpdateQuery( url );
+			return lieux;
 		}
 
-	/**
-	 * <summary>Remove an <paramref name="element" /> from the database</summary>
-	 */
-		public static void Delete( object element )
+		public static Lieu GetLieuById( int id )
 		{
-			Type type  = element.GetType();
-			string id  = type.GetProperties()[ 0 ].GetValue( element ).ToString();
-			string url = String.Format( "{0}/Delete{0}?id={1}", type.Name, id );
+			string host = "https://localhost:7201/";
+			string parameters = "Lieu/GetLieuById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
 
-			API.DeleteQuery( url );
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Lieu lieu = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				lieu = Converter.ToLieu( obj );
+			}
+
+			return lieu;
 		}
 
-	// == Others functions ==
-		public static Type? GetFullTypeName( string targetType )
+		public static bool UpdateLieu( Lieu lieu )
 		{
-			return Type.GetType( "StivePC.Models." + targetType );
+			string host = "https://localhost:7201/";
+			string parameters = "Lieu/EditLieu?" + Converter.ToParameters( lieu, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteLieu( Lieu lieu )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Lieu/DeleteLieu?id=" + lieu.id_lieu;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteLieu( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Lieu/DeleteLieu?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
 		}
 	}
 }
