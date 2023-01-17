@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StivePC"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="STIVE - Connexion" Height="500" Width="350">
     <Grid>
+        <Label x:Name="Email_Lbl" Content="Adresse email" HorizontalAlignment="Left" Margin="125,76,0,0" VerticalAlignment="Top" Width="100" Height="26" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="Email_Txt" HorizontalAlignment="Left" Margin="75,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" BorderThickness="2,2,2,2" BorderBrush="#FF4C4C4C"/>
+        <Label x:Name="Password_Lbl" Content="Mot de passe" HorizontalAlignment="Center" Margin="0,242,0,0" VerticalAlignment="Top" Width="100" Height="26" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="Password_Txt" HorizontalAlignment="Center" Margin="0,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" BorderThickness="2,2,2,2" BorderBrush="#FF4C4C4C"/>
+        <Button x:Name="Connexion_Btn" Content="Se connecter" HorizontalAlignment="Center" Margin="0,388,0,0" VerticalAlignment="Top" Width="100" Height="35" Click="Connexion_Btn_Click"/>
 
     </Grid>
 </Window>
