@@ -643,5 +643,111 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+	// == ROLE == //
+		public static bool AddRole( Role role )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Role/AddRole?" + Converter.ToParameters( role );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Role> GetAllRole()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Role/GetAllRole";
+			List<Role> roles = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray rolesJSON = JArray.Parse( json );
+
+				foreach ( JToken token in rolesJSON )
+				{
+					Role role = Converter.ToRole( token );
+					roles.Add( role );
+				}
+			}
+
+			return roles;
+		}
+
+		public static Role GetRoleById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Role/GetRoleById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Role role = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				role = Converter.ToRole( obj );
+			}
+
+			return role;
+		}
+
+		public static bool UpdateRole( Role role )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Role/EditRole?" + Converter.ToParameters( role, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteRole( Role role )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Role/DeleteRole?id=" + role.id_role;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteRole( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Role/DeleteRole?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
 	}
 }

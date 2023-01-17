@@ -269,6 +269,41 @@ namespace StivePC.Models
 			);
 		}
 
+	// == ROLE == //
+		public static Role ToRole( JToken token )
+		{
+			Role role = new()
+			{
+				id_role = Convert.ToInt32( token[ "id_role" ] ),
+				libelle = token[ "libelle" ].ToString()
+			};
+
+			return role;
+		}
+
+		public static Role ToRole( JObject token )
+		{
+			Role role = new()
+			{
+				id_role = Convert.ToInt32( token[ "id_role" ] ),
+				libelle = token[ "libelle" ].ToString()
+			};
+
+			return role;
+		}
+
+		public static string ToParameters( Role role, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", role.id_role )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"libelle={0}",
+				Converter.NoSpaces( role.libelle )
+			);
+		}
+
 		public static string NoSpaces( string value )
 		{
 			return value.Contains( ' ' )
