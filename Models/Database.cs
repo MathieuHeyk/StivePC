@@ -371,7 +371,7 @@ namespace StivePC.Models
 		public static Fournisseur GetFournisseurById( int id )
 		{
 			string host = "https://localhost:7201/";
-			string parameters = "Famille/GetFournisseurById?id=" + id;
+			string parameters = "Fournisseur/GetFournisseurById?id=" + id;
 			HttpClient client = new()
 			{
 				BaseAddress = new Uri( host )
@@ -422,6 +422,112 @@ namespace StivePC.Models
 		{
 			string host = "https://localhost:7201/";
 			string parameters = "Fournisseur/DeleteFournisseur?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+	// == FOURNISSEUR == //
+		public static bool AddInventaire( Inventaire inventaire )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Inventaire/AddInventaire?" + Converter.ToParameters( inventaire );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Inventaire> GetAllInventaire()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Inventaire/GetAllInventaire";
+			List<Inventaire> inventaires = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray inventairesJSON = JArray.Parse( json );
+
+				foreach ( JToken token in inventairesJSON )
+				{
+					Inventaire inventaire = Converter.ToInventaire( token );
+					inventaires.Add( inventaire );
+				}
+			}
+
+			return inventaires;
+		}
+
+		public static Inventaire GetInventaireById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Inventare/GetInventaireById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Inventaire inventaire = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				inventaire = Converter.ToInventaire( obj );
+			}
+
+			return inventaire;
+		}
+
+		public static bool UpdateInventaire( Inventaire inventaire )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Inventaire/EditInventaire?" + Converter.ToParameters( inventaire, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteInventaire( Inventaire inventaire )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Inventaire/DeleteInventaire?id=" + inventaire.id_inventaire;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteInventaire( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Inventaire/DeleteInventaire?id=" + id;
 			HttpClient client = new()
 			{
 				BaseAddress = new Uri( host )

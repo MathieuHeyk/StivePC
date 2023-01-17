@@ -184,6 +184,50 @@ namespace StivePC.Models
 			);
 		}
 
+	// == INVENTAIRE == //
+		public static Inventaire ToInventaire( JToken token )
+		{
+			Inventaire inventaire = new()
+			{
+				id_inventaire = Convert.ToInt32( token[ "id" ] ),
+				id_article = Convert.ToInt32( token[ "id_article" ] ),
+				quantite = Convert.ToInt32( token[ "quantite" ] ),
+				date = token[ "date" ].ToString(),
+				id_utilisateur = Convert.ToInt32( token[ "id_utilisateur" ] )
+			};
+
+			return inventaire;
+		}
+
+		public static Inventaire ToInventaire( JObject token )
+		{
+			Inventaire inventaire = new()
+			{
+				id_inventaire = Convert.ToInt32( token[ "id" ] ),
+				id_article = Convert.ToInt32( token[ "id_article" ] ),
+				quantite = Convert.ToInt32( token[ "quantite" ] ),
+				date = token[ "date" ].ToString(),
+				id_utilisateur = Convert.ToInt32( token[ "id_utilisateur" ] )
+			};
+
+			return inventaire;
+		}
+
+		public static string ToParameters( Inventaire inventaire, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", inventaire.id_inventaire )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"id_article={0}&quantite={1}&date={2}&id_utilisateur={3}",
+				inventaire.id_article.ToString(),
+				inventaire.quantite.ToString(),
+				Converter.NoSpaces( inventaire.date ),
+				inventaire.id_utilisateur.ToString()
+			);
+		}
+
 		public static string NoSpaces( string value )
 		{
 			return value.Contains( ' ' )
