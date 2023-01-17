@@ -304,6 +304,44 @@ namespace StivePC.Models
 			);
 		}
 
+	// == STOCK == //
+		public static Stock ToStock( JToken token )
+		{
+			Stock stock = new()
+			{
+				id_stock = Convert.ToInt32( token[ "id_stock" ] ),
+				id_article = Convert.ToInt32( token[ "id_article" ] ),
+				quantite = Convert.ToInt32( token[ "quantite" ] )
+			};
+
+			return stock;
+		}
+
+		public static Stock ToStock( JObject token )
+		{
+			Stock stock = new()
+			{
+				id_stock = Convert.ToInt32( token[ "id_stock" ] ),
+				id_article = Convert.ToInt32( token[ "id_article" ] ),
+				quantite = Convert.ToInt32( token[ "quantite" ] )
+			};
+
+			return stock;
+		}
+
+		public static string ToParameters( Stock stock, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", stock.id_stock )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"id_aticle={0}&quantite={1}",
+				stock.id_article.ToString(),
+				stock.quantite.ToString()
+			);
+		}
+
 		public static string NoSpaces( string value )
 		{
 			return value.Contains( ' ' )

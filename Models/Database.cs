@@ -749,5 +749,111 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+	// == STOCK == //
+		public static bool AddStock( Stock stock )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Stock/AddStock?" + Converter.ToParameters( stock );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Stock> GetAllStock()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Stock/GetAllStock";
+			List<Stock> stocks = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray stocksJSON = JArray.Parse( json );
+
+				foreach ( JToken token in stocksJSON )
+				{
+					Stock stock = Converter.ToStock( token );
+					stocks.Add( stock );
+				}
+			}
+
+			return stocks;
+		}
+
+		public static Stock GetStockById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Stock/GetStockById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Stock stock = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				stock = Converter.ToStock( obj );
+			}
+
+			return stock;
+		}
+
+		public static bool UpdateStock( Stock stock )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Stock/EditStock?" + Converter.ToParameters( stock, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteStock( Stock stock )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Stock/DeleteStock?id=" + stock.id_stock;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteStock( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Stock/DeleteStock?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
 	}
 }
