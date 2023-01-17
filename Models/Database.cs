@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Reflection;
 
 namespace StivePC.Models
 {
@@ -477,7 +476,7 @@ namespace StivePC.Models
 		public static Inventaire GetInventaireById( int id )
 		{
 			string host = "https://localhost:7201/";
-			string parameters = "Inventare/GetInventaireById?id=" + id;
+			string parameters = "Inventaire/GetInventaireById?id=" + id;
 			HttpClient client = new()
 			{
 				BaseAddress = new Uri( host )

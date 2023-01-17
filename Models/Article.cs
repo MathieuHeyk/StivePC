@@ -21,16 +21,5 @@ namespace StivePC.Models
 		public int id_famille { get; set; }
 
 		public int id_fournisseur { get; set; }
-
-	// == Functions == //
-		public int GetIdFamille()
-		{
-			return id_famille;
-		}
-
-		public int GetIdFournisseur()
-		{
-			return id_fournisseur;
-		}
 	}
 }
