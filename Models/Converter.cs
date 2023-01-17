@@ -54,6 +54,55 @@ namespace StivePC.Models
 			);
 		}
 
+		public static Article ToArticle( JToken token )
+		{
+			Article article = new()
+			{
+				id = Convert.ToInt32( token[ "id" ] ),
+				nom = token[ "nom" ].ToString(),
+				prix_unitaire = Convert.ToDouble( token[ "prix_unitaire" ] ),
+				prix_carton = Convert.ToDouble( token[ "prix_carton" ] ),
+				annee = Convert.ToInt32( token[ "annee" ] ),
+				id_famille = Convert.ToInt32( token[ "id_famille" ] ),
+				id_fournisseur = Convert.ToInt32( token[ "id_fournisseur" ] )
+			};
+
+			return article;
+		}
+
+		public static Article ToArticle( JObject token )
+		{
+			Article article = new()
+			{
+				id = Convert.ToInt32( token[ "id" ] ),
+				nom = token[ "nom" ].ToString(),
+				prix_unitaire = Convert.ToDouble( token[ "prix_unitaire" ] ),
+				prix_carton = Convert.ToDouble( token[ "prix_carton" ] ),
+				annee = Convert.ToInt32( token[ "annee" ] ),
+				id_famille = Convert.ToInt32( token[ "id_famille" ] ),
+				id_fournisseur = Convert.ToInt32( token[ "id_fournisseur" ] )
+			};
+
+			return article;
+		}
+
+		public static string ToParameters( Article article, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", article.id )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"nom={0}&prix_unitaire={1}&prix_carton={2}&annee={3}&id_famille={4}&id_fournisseur={5}",
+				Converter.NoSpaces( article.nom ),
+				article.prix_unitaire.ToString(),
+				article.prix_carton.ToString(),
+				article.annee.ToString(),
+				article.id_famille.ToString(),
+				article.id_fournisseur.ToString()
+			);
+		}
+
 		public static string NoSpaces( string value )
 		{
 			return value.Contains( ' ' )

@@ -113,5 +113,111 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+	// == ARTICLE == //
+		public static bool AddArticle( Article article )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Article/AddArticle?" + Converter.ToParameters( article );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Article> GetAllArticle()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Article/GetAllArticle";
+			List<Article> articles = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray articlesJSON = JArray.Parse( json );
+
+				foreach ( JToken token in articlesJSON )
+				{
+					Article article = Converter.ToArticle( token );
+					articles.Add( article );
+				}
+			}
+
+			return articles;
+		}
+
+		public static Article GetArticleById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Article/GetArticleById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Article article = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				article = Converter.ToArticle( obj );
+			}
+
+			return article;
+		}
+
+		public static bool UpdateArticle( Article article )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Article/EditArticle?" + Converter.ToParameters( article, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteArticle( Article article )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Article/DeleteArticle?id=" + article.id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteArticle( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Article/DeleteArticle?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
 	}
 }
