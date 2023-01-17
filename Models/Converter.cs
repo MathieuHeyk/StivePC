@@ -5,6 +5,7 @@ namespace StivePC.Models
 {
 	internal class Converter
 	{
+	// == LIEU == //
 		public static Lieu ToLieu( JToken token )
 		{
 			Lieu lieu = new()
@@ -54,6 +55,7 @@ namespace StivePC.Models
 			);
 		}
 
+	// == ARTICLE == //
 		public static Article ToArticle( JToken token )
 		{
 			Article article = new()
@@ -100,6 +102,41 @@ namespace StivePC.Models
 				article.annee.ToString(),
 				article.id_famille.ToString(),
 				article.id_fournisseur.ToString()
+			);
+		}
+
+	// == FAMILLE == //
+		public static Famille ToFamille( JToken token )
+		{
+			Famille famille = new()
+			{
+				id_famille = Convert.ToInt32( token[ "id_famille" ] ),
+				libelle = token[ "libelle" ].ToString()
+			};
+
+			return famille;
+		}
+
+		public static Famille ToFamille( JObject token )
+		{
+			Famille famille = new()
+			{
+				id_famille = Convert.ToInt32( token[ "id_famille" ] ),
+				libelle = token[ "libelle" ].ToString()
+			};
+
+			return famille;
+		}
+
+		public static string ToParameters( Famille famille, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", famille.id_famille )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"libelle={0}",
+				Converter.NoSpaces( famille.libelle )
 			);
 		}
 

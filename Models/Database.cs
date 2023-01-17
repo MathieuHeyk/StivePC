@@ -219,5 +219,111 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+	// == FAMILLE == //
+		public static bool AddFamille( Famille famille )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Famille/AddFamille?" + Converter.ToParameters( famille );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Famille> GetAllFamille()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Famille/GetAllFamille";
+			List<Famille> familles = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray famillesJSON = JArray.Parse( json );
+
+				foreach ( JToken token in famillesJSON )
+				{
+					Famille famille = Converter.ToFamille( token );
+					familles.Add( famille );
+				}
+			}
+
+			return familles;
+		}
+
+		public static Famille GetFamilleById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Famille/GetFamilleById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Famille famille = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				famille = Converter.ToFamille( obj );
+			}
+
+			return famille;
+		}
+
+		public static bool UpdateFamille( Famille famille )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Famille/EditFamille?" + Converter.ToParameters( famille, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteFamille( Famille famille )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Famille/DeleteFamille?id=" + famille.id_famille;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteFamille( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Famille/DeleteFamille?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
 	}
 }
