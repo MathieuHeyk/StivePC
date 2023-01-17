@@ -325,5 +325,111 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+	// == FAMILLE == //
+		public static bool AddFournisseur( Fournisseur fournisseur )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Fournisseur/AddFournisseur?" + Converter.ToParameters( fournisseur );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Fournisseur> GetAllFournisseur()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Fournisseur/GetAllFournisseur";
+			List<Fournisseur> fournisseurs = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray fournisseursJSON = JArray.Parse( json );
+
+				foreach ( JToken token in fournisseursJSON )
+				{
+					Fournisseur fournisseur = Converter.ToFournisseur( token );
+					fournisseurs.Add( fournisseur );
+				}
+			}
+
+			return fournisseurs;
+		}
+
+		public static Fournisseur GetFournisseurById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Famille/GetFournisseurById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Fournisseur fournisseur = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				fournisseur = Converter.ToFournisseur( obj );
+			}
+
+			return fournisseur;
+		}
+
+		public static bool UpdateFournisseur( Fournisseur fournisseur )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Fournisseur/EditFournisseur?" + Converter.ToParameters( fournisseur, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteFournisseur( Fournisseur fournisseur )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Fournisseur/DeleteFournisseur?id=" + fournisseur.id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteFournisseur( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Fournisseur/DeleteFournisseur?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
 	}
 }

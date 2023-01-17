@@ -140,6 +140,50 @@ namespace StivePC.Models
 			);
 		}
 
+	// == FOURNISSEUR == //
+		public static Fournisseur ToFournisseur( JToken token )
+		{
+			Fournisseur fournisseur = new()
+			{
+				id = Convert.ToInt32( token[ "id" ] ),
+				nom = token[ "nom" ].ToString(),
+				telephone = token[ "telephone" ].ToString(),
+				email = token[ "email" ].ToString(),
+				id_lieu = Convert.ToInt32( token[ "id_lieu" ] )
+			};
+
+			return fournisseur;
+		}
+
+		public static Fournisseur ToFournisseur( JObject token )
+		{
+			Fournisseur fournisseur = new()
+			{
+				id = Convert.ToInt32( token[ "id" ] ),
+				nom = token[ "nom" ].ToString(),
+				telephone = token[ "telephone" ].ToString(),
+				email = token[ "email" ].ToString(),
+				id_lieu = Convert.ToInt32( token[ "id_lieu" ] )
+			};
+
+			return fournisseur;
+		}
+
+		public static string ToParameters( Fournisseur fournisseur, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", fournisseur.id )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"nom={0}&telepone={1}&email={2}&id_lieu={3}",
+				Converter.NoSpaces( fournisseur.nom ),
+				Converter.NoSpaces( fournisseur.telephone ),
+				Converter.NoSpaces( fournisseur.email ),
+				fournisseur.id_lieu.ToString()
+			);
+		}
+
 		public static string NoSpaces( string value )
 		{
 			return value.Contains( ' ' )
