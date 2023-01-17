@@ -228,6 +228,47 @@ namespace StivePC.Models
 			);
 		}
 
+	// == LIGNE COMMANDE == //
+		public static LigneCommande ToLigneCommande( JToken token )
+		{
+			LigneCommande ligneCommande = new()
+			{
+				id_ligne_commande = Convert.ToInt32( token[ "id_ligne_commande" ] ),
+				id_article = Convert.ToInt32( token[ "id_article" ] ),
+				quantite = Convert.ToInt32( token[ "quantite" ] ),
+				num_commande = Convert.ToInt32( token[ "num_commande" ] )
+			};
+
+			return ligneCommande;
+		}
+
+		public static LigneCommande ToLigneCommande( JObject token )
+		{
+			LigneCommande ligneCommande = new()
+			{
+				id_ligne_commande = Convert.ToInt32( token[ "id_ligne_commande" ] ),
+				id_article = Convert.ToInt32( token[ "id_article" ] ),
+				quantite = Convert.ToInt32( token[ "quantite" ] ),
+				num_commande = Convert.ToInt32( token[ "num_commande" ] )
+			};
+
+			return ligneCommande;
+		}
+
+		public static string ToParameters( LigneCommande ligneCommande, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", ligneCommande.id_ligne_commande )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"id_article={0}&quantite={1}&num_commande={2}",
+				ligneCommande.id_article.ToString(),
+				ligneCommande.quantite.ToString(),
+				ligneCommande.num_commande.ToString()
+			);
+		}
+
 		public static string NoSpaces( string value )
 		{
 			return value.Contains( ' ' )

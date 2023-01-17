@@ -537,5 +537,111 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+	// == LIGNE COMMANDE == //
+		public static bool AddLigneCommande( LigneCommande ligneCommande )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "LigneCommande/AddLigneCommande?" + Converter.ToParameters( ligneCommande );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<LigneCommande> GetAllLigneCommande()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "LigneCommande/GetAllLigneCommande";
+			List<LigneCommande> ligneCommandes = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray ligneCommandesJSON = JArray.Parse( json );
+
+				foreach ( JToken token in ligneCommandesJSON )
+				{
+					LigneCommande ligneCommande = Converter.ToLigneCommande( token );
+					ligneCommandes.Add( ligneCommande );
+				}
+			}
+
+			return ligneCommandes;
+		}
+
+		public static LigneCommande GetLigneCommandeById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "LigneCommande/GetLigneCommandeById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			LigneCommande ligneCommande = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				ligneCommande = Converter.ToLigneCommande( obj );
+			}
+
+			return ligneCommande;
+		}
+
+		public static bool UpdateLigneCommande( LigneCommande ligneCommande )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "LigneCommande/EditLigneCommande?" + Converter.ToParameters( ligneCommande, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteLigneCommande( LigneCommande ligneCommande )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "LigneCommande/DeleteLigneCommande?id=" + ligneCommande.id_ligne_commande;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteLigneCommande( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "LigneCommande/DeleteLigneCommande?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
 	}
 }
