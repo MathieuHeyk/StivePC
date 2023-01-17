@@ -326,7 +326,7 @@ namespace StivePC.Models
 			return response.IsSuccessStatusCode;
 		}
 
-	// == FAMILLE == //
+	// == FOURNISSEUR == //
 		public static bool AddFournisseur( Fournisseur fournisseur )
 		{
 			string host = "https://localhost:7201/";
