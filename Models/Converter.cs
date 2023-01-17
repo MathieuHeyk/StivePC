@@ -342,6 +342,59 @@ namespace StivePC.Models
 			);
 		}
 
+	// == UTILISATEUR == //
+		public static Utilisateur ToUtilisateur( JToken token )
+		{
+			Utilisateur utilisateur = new()
+			{
+				id_utilisateur = Convert.ToInt32( token[ "id_utilisateur" ] ),
+				nom = token[ "nom" ].ToString(),
+				prenom = token[ "prenom" ].ToString(),
+				email = token[ "email" ].ToString(),
+				password = token[ "password" ].ToString(),
+				telephone = token[ "telephone" ].ToString(),
+				id_lieu = Convert.ToInt32( token[ "id_lieu" ] ),
+				id_role = Convert.ToInt32( token[ "id_role" ] )
+			};
+
+			return utilisateur;
+		}
+
+		public static Utilisateur ToUtilisateur( JObject token )
+		{
+			Utilisateur utilisateur = new()
+			{
+				id_utilisateur = Convert.ToInt32( token[ "id_utilisateur" ] ),
+				nom = token[ "nom" ].ToString(),
+				prenom = token[ "prenom" ].ToString(),
+				email = token[ "email" ].ToString(),
+				password = token[ "password" ].ToString(),
+				telephone = token[ "telephone" ].ToString(),
+				id_lieu = Convert.ToInt32( token[ "id_lieu" ] ),
+				id_role = Convert.ToInt32( token[ "id_role" ] )
+			};
+
+			return utilisateur;
+		}
+
+		public static string ToParameters( Utilisateur utilisateur, bool mustContainsId = false )
+		{
+			string includes = mustContainsId
+								 ? String.Format( "id={0}&", utilisateur.id_utilisateur )
+								 : String.Empty;
+
+			return includes + String.Format(
+				"nom={0}&prenom={1}&email={2}&password={3}&telephone={4}&id_lieu={5}&id_role={6}",
+				Converter.NoSpaces( utilisateur.nom ),
+				Converter.NoSpaces( utilisateur.prenom ),
+				Converter.NoSpaces( utilisateur.email ),
+				Converter.NoSpaces( utilisateur.password ),
+				Converter.NoSpaces( utilisateur.telephone ),
+				utilisateur.id_lieu.ToString(),
+				utilisateur.id_role.ToString()
+			);
+		}
+
 		public static string NoSpaces( string value )
 		{
 			return value.Contains( ' ' )

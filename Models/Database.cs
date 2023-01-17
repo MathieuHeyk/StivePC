@@ -855,5 +855,111 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+	// == UTILISATEUR == //
+		public static bool AddUtilisateur( Utilisateur utilisateur )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Utilisateur/AddUtilisateur?" + Converter.ToParameters( utilisateur );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PostAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static List<Utilisateur> GetAllUtilisateur()
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Utilisateur/GetAllUtilisateur";
+			List<Utilisateur> utilisateurs = new();
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JArray utilisateursJSON = JArray.Parse( json );
+
+				foreach ( JToken token in utilisateursJSON )
+				{
+					Utilisateur utilisateur = Converter.ToUtilisateur( token );
+					utilisateurs.Add( utilisateur );
+				}
+			}
+
+			return utilisateurs;
+		}
+
+		public static Utilisateur GetUtilisateurById( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Utilisateur/GetUtilisateurById?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.GetAsync( parameters ).Result;
+			Utilisateur utilisateur = new();
+
+			if ( response.IsSuccessStatusCode )
+			{
+				string json = response.Content.ReadAsStringAsync().Result;
+				JObject obj = JObject.Parse( json );
+				utilisateur = Converter.ToUtilisateur( obj );
+			}
+
+			return utilisateur;
+		}
+
+		public static bool UpdateUtilisateur( Utilisateur utilisateur )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Utilisateur/EditUtilisateur?" + Converter.ToParameters( utilisateur, true );
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.PutAsync( parameters, null ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteUtilisateur( Utilisateur utilisateur )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Utilisateur/DeleteUtilisateur?id=" + utilisateur.id_utilisateur;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
+
+		public static bool DeleteUtilisateur( int id )
+		{
+			string host = "https://localhost:7201/";
+			string parameters = "Utilisateur/DeleteUtilisateur?id=" + id;
+			HttpClient client = new()
+			{
+				BaseAddress = new Uri( host )
+			};
+
+			HttpResponseMessage response = client.DeleteAsync( parameters ).Result;
+
+			return response.IsSuccessStatusCode;
+		}
 	}
 }
