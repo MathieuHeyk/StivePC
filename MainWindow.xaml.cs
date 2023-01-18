@@ -31,6 +31,8 @@ namespace StivePC
 
 		private void Connection_Btn_Click(object sender, RoutedEventArgs e)
 		{
+			Error_login.Visibility = Visibility.Hidden;
+
 			List<Utilisateur> employes = Database.GetAllEmployes();
 
 			string email = Email_Txt.Text;
@@ -41,8 +43,11 @@ namespace StivePC
 				if ( employe.email == email && employe.password == password )
 				{
 					Email_Lbl.Content = employe.prenom + " " + employe.nom;
+					return;
 				}
 			}
+
+			Error_login.Visibility = Visibility.Visible;
 		}
 	}
 }

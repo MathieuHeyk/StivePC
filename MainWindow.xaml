@@ -61,6 +61,15 @@
         </Border>
         
         <!-- Connection Button -->
+        <Label x:Name="Error_login" Content="Identifiant ou mot de passe incorrect"
+               HorizontalAlignment="Center" VerticalAlignment="Bottom"
+               Margin="0,0,0,90" Padding="0"
+               Width="250" Height="15"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               FontSize="11" FontStyle="Italic"
+               Foreground="Red"
+               Visibility="Hidden"/>
+
         <Border BorderBrush="#FF8E8E8E" BorderThickness="1,1,1,1" CornerRadius="2"
                 Width="150" Height="40"
                 Margin="0,330,0,0">
