@@ -960,5 +960,34 @@ namespace StivePC.Models
 
 			return response.IsSuccessStatusCode;
 		}
+
+
+	// == OTHERS == //
+		public static List<Utilisateur> GetAllEmployes()
+		{
+			List<Role> roles = GetAllRole();
+			Role roleEmploye = new();
+
+			foreach ( Role role in roles )
+			{
+				if ( role.libelle == "Employé" )
+				{
+					roleEmploye = role;
+				}
+			}
+
+			List<Utilisateur> utilisateurs = GetAllUtilisateur();
+			List<Utilisateur> employes = new();
+
+			foreach ( Utilisateur utilisateur in utilisateurs )
+			{
+				if ( utilisateur.id_role == roleEmploye.id_role )
+				{
+					employes.Add( utilisateur );
+				}
+			}
+
+			return employes;
+		}
 	}
 }

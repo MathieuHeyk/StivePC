@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StivePC.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,30 @@ namespace StivePC
 		public MainWindow()
 		{
 			InitializeComponent();
+		}
+
+	// ToDo: email format validator
+	// ToDo: auto-hidding password
+
+		private void Connection_Btn_Click(object sender, RoutedEventArgs e)
+		{
+			Error_login.Visibility = Visibility.Hidden;
+
+			List<Utilisateur> employes = Database.GetAllEmployes();
+
+			string email = Email_Txt.Text;
+			string password = Password_Txt.Text;
+
+			foreach ( Utilisateur employe in employes )
+			{
+				if ( employe.email == email && employe.password == password )
+				{
+					Email_Lbl.Content = employe.prenom + " " + employe.nom;
+					return;
+				}
+			}
+
+			Error_login.Visibility = Visibility.Visible;
 		}
 	}
 }
