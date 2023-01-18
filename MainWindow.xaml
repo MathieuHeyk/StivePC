@@ -7,11 +7,69 @@
         mc:Ignorable="d"
         Title="STIVE - Connexion" Height="500" Width="350">
     <Grid>
-        <Label x:Name="Email_Lbl" Content="Adresse email" HorizontalAlignment="Left" Margin="125,76,0,0" VerticalAlignment="Top" Width="100" Height="26" HorizontalContentAlignment="Center"/>
-        <TextBox x:Name="Email_Txt" HorizontalAlignment="Left" Margin="75,134,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" BorderThickness="2,2,2,2" BorderBrush="#FF4C4C4C"/>
-        <Label x:Name="Password_Lbl" Content="Mot de passe" HorizontalAlignment="Center" Margin="0,242,0,0" VerticalAlignment="Top" Width="100" Height="26" HorizontalContentAlignment="Center"/>
-        <TextBox x:Name="Password_Txt" HorizontalAlignment="Center" Margin="0,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" BorderThickness="2,2,2,2" BorderBrush="#FF4C4C4C"/>
-        <Button x:Name="Connexion_Btn" Content="Se connecter" HorizontalAlignment="Center" Margin="0,388,0,0" VerticalAlignment="Top" Width="100" Height="35" Click="Connexion_Btn_Click"/>
+        <!-- Header -->
+        <Label x:Name="Title" Content="STIVE"
+               HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="0,50,0,0"
+               Width="120" Height="60"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               FontSize="32" FontWeight="Bold"/>
+        
+        <Label x:Name="Subtitle" Content="STock, Inventaire et VEnte en ligne"
+               HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="0,90,0,0"
+               Width="200" Height="30"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               FontStyle="Italic"/>
 
+        <!-- Email field -->
+        <Label x:Name="Email_Lbl" Content="Adresse E-mail"
+               HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="0,165,0,0"
+               Width="250" Height="30"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               FontSize="16" FontWeight="Bold" FontStyle="Italic"/>
+        
+        <Border BorderBrush="#FF8E8E8E" BorderThickness="1,1,1,1" CornerRadius="2"
+                Width="250" Height="30"
+                Margin="0,-30,0,0">
+            <TextBox x:Name="Email_Txt"
+                     BorderThickness="0"
+                     FontSize="14" FontStyle="Italic"
+                     Width="250" Height="30"
+                     VerticalContentAlignment="Center"
+                     Padding="6,0,6,0"/>
+        </Border>
+        
+        <!-- Password field -->
+        <Label x:Name="Password_Lbl" Content="Mot de passe"
+               HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="0,265,0,0"
+               Width="250" Height="30"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               FontSize="16" FontWeight="Bold" FontStyle="Italic"/>
+
+        <Border BorderBrush="#FF8E8E8E" BorderThickness="1,1,1,1" CornerRadius="2"
+                Width="250" Height="30"
+                Margin="0,170,0,0">
+            <TextBox x:Name="Password_Txt"
+                     BorderThickness="0"
+                     FontSize="14" FontStyle="Italic"
+                     Width="250" Height="30"
+                     VerticalContentAlignment="Center"
+                     Padding="6,0,6,0"/>
+        </Border>
+        
+        <!-- Connection Button -->
+        <Border BorderBrush="#FF8E8E8E" BorderThickness="1,1,1,1" CornerRadius="2"
+                Width="150" Height="40"
+                Margin="0,330,0,0">
+            <Button x:Name="Connection_Btn"
+                    Width="150" Height="40"
+                    BorderThickness="0"
+                    Content="Se connecter"
+                    FontSize="14" FontStyle="Italic"
+                    Click="Connection_Btn_Click"/>
+        </Border>
     </Grid>
 </Window>

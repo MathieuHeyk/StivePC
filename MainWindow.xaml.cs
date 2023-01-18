@@ -26,7 +26,10 @@ namespace StivePC
 			InitializeComponent();
 		}
 
-		private void Connexion_Btn_Click(object sender, RoutedEventArgs e)
+	// ToDo: email format validator
+	// ToDo: auto-hidding password
+
+		private void Connection_Btn_Click(object sender, RoutedEventArgs e)
 		{
 			List<Utilisateur> employes = Database.GetAllEmployes();
 
