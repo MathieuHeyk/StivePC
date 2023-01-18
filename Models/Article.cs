@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StivePC.Models
 {
-	internal class Articl
+	internal class Article
 	{
 		public int id { get; set; }
 
