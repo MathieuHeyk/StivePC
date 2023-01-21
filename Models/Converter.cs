@@ -65,8 +65,8 @@ namespace StivePC.Models
 				prix_unitaire = Convert.ToDouble( token[ "prix_unitaire" ] ),
 				prix_carton = Convert.ToDouble( token[ "prix_carton" ] ),
 				annee = Convert.ToInt32( token[ "annee" ] ),
-				id_famille = Convert.ToInt32( token[ "id_famille" ] ),
-				id_fournisseur = Convert.ToInt32( token[ "id_fournisseur" ] )
+				id_famille = Convert.ToInt32( token[ "iD_famille" ] ),
+				id_fournisseur = Convert.ToInt32( token[ "iD_fournisseur" ] )
 			};
 
 			return article;
@@ -81,8 +81,8 @@ namespace StivePC.Models
 				prix_unitaire = Convert.ToDouble( token[ "prix_unitaire" ] ),
 				prix_carton = Convert.ToDouble( token[ "prix_carton" ] ),
 				annee = Convert.ToInt32( token[ "annee" ] ),
-				id_famille = Convert.ToInt32( token[ "id_famille" ] ),
-				id_fournisseur = Convert.ToInt32( token[ "id_fournisseur" ] )
+				id_famille = Convert.ToInt32( token[ "iD_famille" ] ),
+				id_fournisseur = Convert.ToInt32( token[ "iD_fournisseur" ] )
 			};
 
 			return article;
