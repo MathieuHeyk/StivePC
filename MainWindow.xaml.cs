@@ -1,4 +1,5 @@
 ﻿using StivePC.Models;
+using StivePC.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,8 +43,11 @@ namespace StivePC
 			{
 				if ( employe.email == email && employe.password == password )
 				{
-					Email_Lbl.Content = employe.prenom + " " + employe.nom;
-					return;
+					Session session = Session.GetInstance( employe );
+					Dashboard dashboard = new();
+
+					dashboard.Show();
+					Close();
 				}
 			}
 

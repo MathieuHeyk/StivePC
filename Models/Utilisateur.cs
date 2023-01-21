@@ -23,5 +23,23 @@ namespace StivePC.Models
 		public int id_lieu { get; set; }
 
 		public int id_role { get; set; }
+
+
+		public override string ToString()
+		{
+			string role = Database.GetRoleById( id_role ).libelle;
+
+			return String.Format(
+				"[{0}] {1} {2}",
+				role,
+				prenom,
+				nom
+			);
+		}
+
+		public UserSummary ToShorted()
+		{
+			return new UserSummary( this );
+		}
 	}
 }
