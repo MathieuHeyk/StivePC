@@ -1,0 +1,25 @@
+﻿<Window x:Class="StivePC.Views.AddArticle"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StivePC.Views"
+        mc:Ignorable="d"
+        Title="AddArticle" Height="450" Width="800">
+    <Grid>
+        <Label x:Name="Name_Lbl" Content="Nom" HorizontalAlignment="Left" Margin="41,49,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="Name_Txt" HorizontalAlignment="Left" Margin="82,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="PriceUnit_Lbl" Content="Prix unitaire" HorizontalAlignment="Left" Margin="41,84,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PriceUnit_Txt" HorizontalAlignment="Left" Margin="119,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="PriceBox_Lbl" Content="Prix carton" HorizontalAlignment="Left" Margin="41,118,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PriceBox_Txt" HorizontalAlignment="Left" Margin="112,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="Year_Lbl" Content="Année" HorizontalAlignment="Left" Margin="41,152,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="Year_Txt" HorizontalAlignment="Left" Margin="90,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="Type_Lbl" Content="Famille" HorizontalAlignment="Left" Margin="41,186,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="Types_Combo" HorizontalAlignment="Left" Margin="93,188,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="Provider_Lbl" Content="Fournisseur" HorizontalAlignment="Left" Margin="41,223,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="Providers_Combo" HorizontalAlignment="Left" Margin="117,225,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="Validate_Btn" Content="Ajouter" HorizontalAlignment="Left" Margin="400,350,0,0" VerticalAlignment="Top" Click="Validate_Btn_Click"/>
+        <Button x:Name="Reset_Btn" Content="Éffacer" HorizontalAlignment="Left" Margin="302,350,0,0" VerticalAlignment="Top" Click="Reset_Btn_Click"/>
+    </Grid>
+</Window>

@@ -97,8 +97,8 @@ namespace StivePC.Models
 			return includes + String.Format(
 				"nom={0}&prix_unitaire={1}&prix_carton={2}&annee={3}&id_famille={4}&id_fournisseur={5}",
 				Converter.NoSpaces( article.nom ),
-				article.prix_unitaire.ToString(),
-				article.prix_carton.ToString(),
+				string.Join('.', article.prix_unitaire.ToString().Split(',')),
+				string.Join('.', article.prix_carton.ToString().Split(',')),
 				article.annee.ToString(),
 				article.id_famille.ToString(),
 				article.id_fournisseur.ToString()
@@ -400,6 +400,16 @@ namespace StivePC.Models
 			return value.Contains( ' ' )
 				  ? String.Join( "%20", value.Split( ' ' ) )
 				  : value;
+		}
+
+		// == OTHER == //
+		public static string ToDoubleFormat(string value)
+		{
+			const char TO_REPLACE = '.';
+			const char REPLACER = ',';
+
+			string[] valueSplitted = value.Split(TO_REPLACE);
+			return string.Join(REPLACER, valueSplitted);
 		}
 	}
 }
