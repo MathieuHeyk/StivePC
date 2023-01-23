@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StivePC.Models
 {
@@ -40,6 +37,23 @@ namespace StivePC.Models
 		public UserSummary ToShorted()
 		{
 			return new UserSummary( this );
+		}
+
+		public bool IsClient()
+		{
+			List<Role> roles = Database.GetAllRole();
+			int clientRoleID = 0;
+
+			foreach (Role role in roles)
+			{
+				if (role.libelle == "Client")
+				{
+					clientRoleID = role.id_role;
+					break;
+				}
+			}
+
+			return id_role == clientRoleID;
 		}
 	}
 }
