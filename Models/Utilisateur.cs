@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StivePC.Models
 {
@@ -23,5 +20,35 @@ namespace StivePC.Models
 		public int id_lieu { get; set; }
 
 		public int id_role { get; set; }
+
+
+		public override string ToString()
+		{
+			string role = Database.GetRoleById( id_role ).libelle;
+
+			return String.Format(
+				"[{0}] {1} {2}",
+				role,
+				prenom,
+				nom
+			);
+		}
+
+		public bool IsClient()
+		{
+			List<Role> roles = Database.GetAllRole();
+			int clientRoleID = 0;
+
+			foreach (Role role in roles)
+			{
+				if (role.libelle == "Client")
+				{
+					clientRoleID = role.id_role;
+					break;
+				}
+			}
+
+			return id_role == clientRoleID;
+		}
 	}
 }

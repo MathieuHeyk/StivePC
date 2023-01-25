@@ -963,31 +963,20 @@ namespace StivePC.Models
 
 
 	// == OTHERS == //
-		public static List<Utilisateur> GetAllEmployes()
+		public static List<Utilisateur> GetAllNonClients()
 		{
-			List<Role> roles = GetAllRole();
-			Role roleEmploye = new();
+			List<Utilisateur> users = GetAllUtilisateur();
+			List<Utilisateur> nonClients = new();
 
-			foreach ( Role role in roles )
+			foreach (Utilisateur user in users)
 			{
-				if ( role.libelle == "Employé" )
+				if (!user.IsClient())
 				{
-					roleEmploye = role;
+					nonClients.Add(user);
 				}
 			}
 
-			List<Utilisateur> utilisateurs = GetAllUtilisateur();
-			List<Utilisateur> employes = new();
-
-			foreach ( Utilisateur utilisateur in utilisateurs )
-			{
-				if ( utilisateur.id_role == roleEmploye.id_role )
-				{
-					employes.Add( utilisateur );
-				}
-			}
-
-			return employes;
+			return nonClients;
 		}
 	}
 }

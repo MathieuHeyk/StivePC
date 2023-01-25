@@ -1,18 +1,7 @@
 ﻿using StivePC.Models;
-using System;
+using StivePC.Views;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace StivePC
 {
@@ -33,7 +22,7 @@ namespace StivePC
 		{
 			Error_login.Visibility = Visibility.Hidden;
 
-			List<Utilisateur> employes = Database.GetAllEmployes();
+			List<Utilisateur> employes = Database.GetAllNonClients();
 
 			string email = Email_Txt.Text;
 			string password = Password_Txt.Text;
@@ -42,8 +31,11 @@ namespace StivePC
 			{
 				if ( employe.email == email && employe.password == password )
 				{
-					Email_Lbl.Content = employe.prenom + " " + employe.nom;
-					return;
+					Session session = Session.GetInstance( employe );
+					Dashboard dashboard = new();
+
+					dashboard.Show();
+					Close();
 				}
 			}
 
