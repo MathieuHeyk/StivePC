@@ -34,11 +34,6 @@ namespace StivePC.Models
 			);
 		}
 
-		public UserSummary ToShorted()
-		{
-			return new UserSummary( this );
-		}
-
 		public bool IsClient()
 		{
 			List<Role> roles = Database.GetAllRole();
