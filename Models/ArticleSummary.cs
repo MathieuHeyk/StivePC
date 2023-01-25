@@ -4,6 +4,7 @@ namespace StivePC.Models
 {
    struct ArticleSummary
    {
+    //public int Id { get; set; }
       public string Nom { get; set; }
       public string Famille { get; set; }
       public int Annee { get; set; }
@@ -12,9 +13,10 @@ namespace StivePC.Models
 
       public ArticleSummary(Article article)
       {
+          //Id = article.id;
 			Nom = article.nom;
-			Famille = Database.GetFamilleById(article.id).libelle;
-         Fournisseur = Database.GetFournisseurById(article.id_fournisseur).nom;
+			Famille = Database.GetFamilleById(article.id_famille).libelle;
+            Fournisseur = Database.GetFournisseurById(article.id_fournisseur).nom;
 			Annee = article.annee;
 			Quantite = 0;
 
