@@ -42,11 +42,12 @@
                       AutoGenerateColumns="False"
                       RowHeight="25">
                 <DataGrid.Columns>
+                <!--<DataGridTextColumn Header="ID" Binding="{Binding Id}"/>-->
                     <DataGridTextColumn Header="Nom" Binding="{Binding Nom}"/>
                     <DataGridTextColumn Header="Famille" Binding="{Binding Famille}"/>
                     <DataGridTextColumn Header="Année" Binding="{Binding Annee}"/>
                     <DataGridTextColumn Header="Fournisseur" Binding="{Binding Fournisseur}"/>
-                    <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}"/>
+                    <DataGridTextColumn Header="Quantité en stock" Binding="{Binding Quantite}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

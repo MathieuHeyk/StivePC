@@ -8,7 +8,7 @@
         Title="STIVE - Connexion" Height="500" Width="350">
     <Grid>
         <!-- Header -->
-        <Label x:Name="Title" Content="STIVE"
+        <Label x:Name="Main_Title" Content="STIVE"
                HorizontalAlignment="Center" VerticalAlignment="Top"
                Margin="0,50,0,0"
                Width="120" Height="60"
